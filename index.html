@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Scoreboard</title>
+    <style>
+        body {
+            display: grid;
+            grid-template-columns: 1fr;
+            min-height: 100vh;
+            justify-content: center;
+            align-content: center;
+            justify-self: center;
+            justify-items: center;
+            font-family: 'helvetica neue';
+            margin: 0;
+            background-color:white;
+            color: white;
+            grid-gap: 20px;
+        }
+
+        button {
+            padding: 20px 40px;
+            width: 90%;
+            border: 0;
+            background-color: #A5FFD6;
+            font-size: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 0px grey;
+            position: relative;
+            justify-self: center;
+        }
+
+        div > button:nth-of-type(1) {
+            grid-column: 1 / 1;
+        }
+
+        button:active {
+            box-shadow: none;
+            top: 5px;
+            background-color: #96E8C3
+        }
+
+        body > div {
+            background-color: #FFA69E;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 6px 6px lightgrey;
+            width: 80vw;
+            height: 40vh;
+            background-repeat: no-repeat;
+            background-size: cover;
+            /* background-blend-mode: multiply; */
+            background-position: center;
+            display: grid;
+            /* align-content: ; */
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 50px 1fr 1fr;
+        }
+
+        h2 {
+            grid-column: 1 / 1;
+        }
+
+        h1, h2 {
+            align-self: center;
+            grid-row: 2/
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="playerOne">
+        <h1>Player 1</h1>
+        <h2 id="playerOneScore">Score: 0</h2>
+        <button>-</button>
+        <button>+</button>
+    </div>
+    <div id="playerTwo">
+        <h1>Player 2</h1>
+        <h2 id="playerTwoScore">Score: 0</h2>
+        <button>-</button>
+        <button>+</button>
+    </div>
+    <script>
+        var playerOne = {
+            score: 0,
+            increaseScore: function () {
+                var playerOneScore = document.querySelector('#playerOneScore')
+                this.score++;
+                playerOneScore.textContent = `Score: ${this.score}`;
+            },
+            decreaseScore: function () {
+                this.score--;
+                playerOneScore.textContent = `Score: ${this.score}`;
+            }
+        }
+
+        var playerTwo = {
+            score: 0,
+            increaseScore: function () {
+                var playerTwoScore = document.querySelector('#playerTwoScore')
+                this.score++;
+                playerTwoScore.textContent = `Score: ${this.score}`;
+            },
+            decreaseScore: function () {
+                this.score--;
+                playerTwoScore.textContent = `Score: ${this.score}`;
+            }
+        }
+
+        var view = {
+            setupEventListeners: function () {
+                var playerOneControls = document.querySelector('#playerOne');
+                var playerTwoControls = document.querySelector('#playerTwo');
+                playerOneControls.addEventListener('click', function (e) {
+                    var elementClicked = e.target;
+                    console.log(e)
+                    if (elementClicked.textContent === '+') {
+                        playerOne.increaseScore();
+                    } else if (elementClicked.textContent === '-' && playerOne.score != 0) {
+                        playerOne.decreaseScore();
+                    }
+
+                    if (playerOne.score === 10) {
+                        getDoggo('#playerOne');
+                    }
+                })
+
+                playerTwoControls.addEventListener('click', function (e) {
+                    var elementClicked = e.target;
+
+                    if (elementClicked.textContent === '+') {
+                        playerTwo.increaseScore();
+                    } else if (elementClicked.textContent === '-' && playerTwo.score != 0) {
+                        playerTwo.decreaseScore();
+                    }
+
+                    if (playerTwo.score === 10) {
+                        getDoggo('#playerTwo')
+
+                        // a loader animation should play
+                        // winner should be indicated
+                        // an option to reset score should be displayed
+                        //score will reset to 0
+                        // a victory image should load)
+                    }
+                })
+            }
+        }
+
+        function getDoggo(player) {
+            fetch('https://dog.ceo/api/breeds/image/random')
+                            .then(function (response) {
+                                // console.log(response.json())
+                                return response.json();
+                            }).then(function (data) {
+                                console.log(data.message)
+                                var image = data.message
+                                var winner = document.querySelector(player);
+                                winner.style.backgroundImage = `url('${image}')`
+                            }
+                            )};
+
+        view.setupEventListeners();
+        // The buttons should increase/decrease the individual player score
+        // When the players score reaches 10
+    </script>
+</body>
+
+</html>
